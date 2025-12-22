@@ -8,7 +8,7 @@ import { Button } from "./components/ui/button";
 import { useState } from "react";
 import Home from "./components/pages/home";
 import type { ChatMessage } from "./lib/types";
-import type Chatting from "./components/pages/chatting";
+import Chatting from "./components/pages/chatting";
 
 function App() {
   const [chatting, setChatting] = useState(false)
@@ -16,7 +16,7 @@ function App() {
   return (
     <SidebarProvider className="w-full h-full">
       <AppSidebar />
-      <div className="h-full w-full p-3">
+      <div className="h-full w-full p-3 flex flex-col justify-center">
         <div className="w-full flex flex-row gap-2 h-8 items-center">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

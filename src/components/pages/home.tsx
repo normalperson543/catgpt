@@ -1,12 +1,4 @@
-import { ArrowUpIcon } from "lucide-react";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupTextarea,
-} from "../ui/input-group";
 import type { ChatMessage } from "@/lib/types";
-import { useState } from "react";
 import MessageBox from "../message-box";
 
 export default function Home({
@@ -23,18 +15,20 @@ export default function Home({
       <h2 className="text-3xl tracking-wide font-light">
         Meow meow purr meow lick?
       </h2>
-      <MessageBox
-        onSend={(message) => {
-          setMessages([
-            ...messages,
-            {
-              actor: "user",
-              message: message,
-            },
-          ]);
-          setChatting();
-        }}
-      />
+      <div className="w-1/2">
+        <MessageBox
+          onSend={(message) => {
+            setMessages([
+              ...messages,
+              {
+                actor: "user",
+                message: message,
+              },
+            ]);
+            setChatting();
+          }}
+        />
+      </div>
     </div>
   );
 }

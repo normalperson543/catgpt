@@ -5,7 +5,7 @@ import { ArrowUpIcon } from "lucide-react";
 export default function MessageBox({ onSend }: {onSend: (message: string) => void}) {
   const [message, setMessage] = useState("");
   return (
-    <InputGroup className="w-1/2 rounded-full resize-none shadow-sm shadow-gray-300 p-2 h-3">
+    <InputGroup className="rounded-full resize-none shadow-sm shadow-gray-300 p-2 h-3">
       <InputGroupTextarea
         rows={1}
         placeholder="Ask anymeow"
