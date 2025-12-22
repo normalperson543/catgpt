@@ -128,10 +128,10 @@ export default function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <SidebarMenuButton size="lg">
-                  <Avatar className="rounded-full">
+                  <Avatar className="rounded-full w-6 h-6">
                     <AvatarImage src="https://avatars.githubusercontent.com/u/148504965" />
                   </Avatar>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col flex-1 w-full">
                     <p>normalperson543</p>
                     <p className="text-muted-foreground">Click me :3</p>
                   </div>

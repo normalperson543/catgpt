@@ -7,9 +7,12 @@ import { DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuT
 import { Button } from "./components/ui/button";
 import { useState } from "react";
 import Home from "./components/pages/home";
+import type { ChatMessage } from "./lib/types";
+import type Chatting from "./components/pages/chatting";
 
 function App() {
   const [chatting, setChatting] = useState(false)
+  const [messages, setMessages] = useState<ChatMessage[]>([])
   return (
     <SidebarProvider className="w-full h-full">
       <AppSidebar />
@@ -38,7 +41,7 @@ function App() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        {chatting ? <div></div>: <Home setChatting={() => setChatting(true)} />}
+        {chatting ? <Chatting messages={messages} setMessages={setMessages} /> : <Home messages={messages} setMessages={setMessages} setChatting={() => setChatting(true)} />}
       </div>
     </SidebarProvider>
   );
