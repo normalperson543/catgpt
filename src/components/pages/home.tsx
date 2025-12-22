@@ -2,13 +2,9 @@ import type { ChatMessage } from "@/lib/types";
 import MessageBox from "../message-box";
 
 export default function Home({
-  setChatting,
-  messages,
-  setMessages,
+  onChat,
 }: {
-  setChatting: () => void;
-  messages: ChatMessage[];
-  setMessages: (messages: ChatMessage[]) => void;
+  onChat: (message: string) => void;
 }) {
   return (
     <div className="h-full w-full p-2 flex items-center justify-center flex-col gap-8 -my-8">
@@ -18,14 +14,7 @@ export default function Home({
       <div className="w-1/2">
         <MessageBox
           onSend={(message) => {
-            setMessages([
-              ...messages,
-              {
-                actor: "user",
-                message: message,
-              },
-            ]);
-            setChatting();
+            onChat(message);
           }}
         />
       </div>

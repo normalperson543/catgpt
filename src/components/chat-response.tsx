@@ -1,9 +1,10 @@
-import { marked } from "marked"
-export default function ChatResponse({ markdown }: {markdown: string}) {
-  const renderedMd = marked.parse(markdown)
+import { marked } from "marked";
+export default function ChatResponse({ markdown }: { markdown: string }) {
+  const renderedMd = marked.parse(markdown);
   return (
-    <div>
-      <div dangerouslySetInnerHTML={{ __html: renderedMd }}></div>
-    </div>
-  )
+    <div
+      dangerouslySetInnerHTML={{ __html: renderedMd }}
+      className="flex flex-col gap-3 leading-7"
+    ></div>
+  );
 }
