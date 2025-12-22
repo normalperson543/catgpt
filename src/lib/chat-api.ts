@@ -17,7 +17,11 @@ function generateFakeSentence(partial: boolean = false) {
       // bold
       word = "**" + word + "**";
     }
-    sentence += " " + word;
+    if (words === 0) {
+      sentence = word
+    } else {
+      sentence += " " + word;
+    }
     words++;
   }
   const formattingRandomNumber = Math.random();
@@ -77,6 +81,7 @@ export async function fakeTypeMessages(
       for (let i = 0; i < bullets; i++) {
         structure.push("* " + generateFakeSentence(true) + "\n");
       }
+      structure.push("\n")
     } else {
       // new heading
       let sentence = generateFakeSentence(true);
@@ -86,7 +91,7 @@ export async function fakeTypeMessages(
           emojiDict[Math.floor(Math.random() * (emojiDict.length - 1))] +
           sentence;
       }
-      structure.push("\n## " + sentence);
+      structure.push("\n## " + sentence + "\n");
     }
     console.log("b");
   }

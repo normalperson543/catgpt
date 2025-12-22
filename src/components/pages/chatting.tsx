@@ -13,8 +13,8 @@ export default function Chatting({
   onSend: (message: string) => void
 }) {
   return (
-    <div className="w-1/2 h-full flex flex-col self-center">
-      <div className="flex-1 flex flex-col gap-6 overflow-y-auto h-full" id="chat">
+    <div className="w-full h-full flex flex-col self-center p-11 max-w-1/2">
+      <div className="flex-1 flex flex-col gap-6 h-full" id="chat">
         {messages.map((message) =>
           message.actor == "user" ? (
             <div className="self-end max-w-1/2 p-3 rounded-md bg-gray-100">

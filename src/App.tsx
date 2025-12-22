@@ -24,8 +24,8 @@ function App() {
   return (
     <SidebarProvider className="w-full h-full">
       <AppSidebar />
-      <div className="h-full w-full p-3 flex flex-col justify-center">
-        <div className="w-full flex flex-row gap-2 h-8 items-center">
+      <div className="h-full w-full p-3 flex flex-col">
+        <div className="w-full flex flex-row gap-2 h-8 items-center fixed top-3 bg-background">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button className="flex flex-row gap-2" variant="ghost">
