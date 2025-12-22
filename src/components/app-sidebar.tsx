@@ -7,7 +7,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { SquarePenIcon } from "lucide-react";
+import { CatIcon, PanelRightIcon, SquarePenIcon } from "lucide-react";
+import { useSidebar } from "@/components/ui/sidebar";
+import { Button } from "./ui/button";
+import { useState } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const items = [
   {
@@ -16,10 +20,59 @@ const items = [
     icon: SquarePenIcon,
   },
 ];
-export default function AppSidebar() {
+
+function SidebarToggle() {
+  const { toggleSidebar } = useSidebar();
+
   return (
-    <Sidebar>
-      <SidebarHeader />
+    <Button size="icon-sm" onClick={toggleSidebar} variant="ghost">
+      <PanelRightIcon
+        width={12}
+        height={12}
+        className="text-muted-foreground"
+      />
+    </Button>
+  );
+}
+function HomeButton() {
+  return (
+    <Button size="icon-sm" variant="ghost">
+      <CatIcon width={36} height={36} />
+    </Button>
+  );
+}
+export default function AppSidebar() {
+  const { open, toggleSidebar } = useSidebar();
+  const [hovering, setHovering] = useState(false);
+  return (
+    <Sidebar
+      collapsible="icon"
+      onMouseOver={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      className={!open ? `cursor-ew-resize` : ""}
+      onClick={() => {toggleSidebar}
+    >
+      <SidebarHeader>
+        <div className="flex flex-row">
+          <div className="flex-1">
+            {!open ? (
+              hovering ? (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <SidebarToggle />
+                  </TooltipTrigger>
+                  <TooltipContent>Open me sidebar meow</TooltipContent>
+                </Tooltip>
+              ) : (
+                <HomeButton />
+              )
+            ) : (
+              <HomeButton />
+            )}
+          </div>
+          {open && <SidebarToggle />}
+        </div>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           {items.map((item) => (
