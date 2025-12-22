@@ -1,4 +1,5 @@
 export type ChatMessage = {
   actor: "user" | "ai",
-  message: string
+  message: string,
+  complete: boolean
 }

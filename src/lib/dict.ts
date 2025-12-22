@@ -4,5 +4,13 @@ export const dict = [
   "lick",
   "mrow",
   "hiss",
+  "scratch",
+  "purrrrrr",
+  "miao",
+  "mreow",
+  "mew",
+  "mewwwww",
+  "hissssss",
+  "meowwwww"
 ]
 export const emojiDict = ["🐱","🐈","🐈‍⬛","😻","🙀","😸","😺","✅","🚀","❌","❗️","⚠️"]

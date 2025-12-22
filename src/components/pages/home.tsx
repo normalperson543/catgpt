@@ -1,4 +1,3 @@
-import type { ChatMessage } from "@/lib/types";
 import MessageBox from "../message-box";
 
 export default function Home({

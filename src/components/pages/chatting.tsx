@@ -10,26 +10,33 @@ export default function Chatting({
 }: {
   messages: ChatMessage[];
   loading: boolean;
-  onSend: (message: string) => void
+  onSend: (message: string) => void;
 }) {
   return (
-    <div className="w-full h-full flex flex-col self-center p-11 max-w-1/2">
-      <div className="flex-1 flex flex-col gap-6 h-full" id="chat">
-        {messages.map((message) =>
-          message.actor == "user" ? (
-            <div className="self-end max-w-1/2 p-3 rounded-md bg-gray-100">
-              {message.message}
-            </div>
-          ) : (
-            <ChatResponse markdown={message.message} />
-          ),
-        )}
-        {loading && <Spinner />}
+    <div className="flex flex-col min-h-screen pt-11 -mt-3">
+      <div className="flex-1 min-h-0 overflow-y-auto flex flex-col justify-center">
+        <div className="w-full h-full flex flex-col self-center max-w-3/5 flex-1 min-h-0">
+          <div className="flex-1 flex flex-col gap-6 h-full min-h-0" id="chat">
+            {messages.map((message) =>
+              message.actor == "user" ? (
+                <div className="self-end max-w-1/2 p-3 rounded-md bg-gray-100">
+                  {message.message}
+                </div>
+              ) : (
+                <ChatResponse markdown={message.message} complete={message.complete} />
+              ),
+            )}
+            {loading && <Spinner />}
+          </div>
+        </div>
       </div>
-      <div className="flex flex-col gap-2 w-full">
-        <MessageBox
-          onSend={onSend}
-        />
+      <div className="w-full pb-6 flex flex-col items-center text-center">
+        <div className="w-3/5 flex flex-col gap-2">
+          <MessageBox onSend={onSend} />
+          <p className="text-muted-foreground text-xs">
+            CatGPT is not AI and will make mistakes. Don't bother checking important info
+          </p>
+        </div>
       </div>
     </div>
   );

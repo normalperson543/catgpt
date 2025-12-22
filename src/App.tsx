@@ -61,6 +61,7 @@ function App() {
                 {
                   actor: "user",
                   message: message,
+                  complete: true
                 },
               ]
               setMessages(newMessages);
@@ -76,6 +77,7 @@ function App() {
                 {
                   actor: "user",
                   message: message,
+                  complete: true
                 },
               ]
               console.log(newMessages)

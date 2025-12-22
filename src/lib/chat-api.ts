@@ -59,14 +59,14 @@ export async function fakeTypeMessages(
   const structure = [];
   for (let i = 0; i < maxElements; i++) {
     const randomElement = Math.random();
-    if (randomElement < 0.6) {
+    if (randomElement < 0.7) {
       structure.push(generateFakeSentence());
-    } else if (randomElement < 0.8) {
+    } else if (randomElement < 0.75) {
       if (structure[structure.length - 1] != "\n") {
         structure.push("\n");
       }
     } else if (randomElement < 0.9) {
-      let sentence = generateFakeSentence(true);
+      let sentence = generateFakeSentence();
       const emojiRandomChance = Math.random();
       if (emojiRandomChance < 0.7) {
         sentence =
@@ -104,7 +104,7 @@ export async function fakeTypeMessages(
     setTimeout(resolve, Math.floor(Math.random() * 5000) + 500),
   );
   setLoading(false);
-  messages = [...messages, { actor: "ai", message: "" }]
+  messages = [...messages, { actor: "ai", message: "", complete: false }]
   setMessages(messages);
   for (let i = 0; i < markdown.length; i += Math.floor(Math.random() * 4) + 1) {
     const partialMessage = markdown.substring(0, i)
@@ -130,6 +130,7 @@ export async function fakeTypeMessages(
       return {
         ...message,
         message: markdown,
+        complete: true
       };
     } else {
       return message;
