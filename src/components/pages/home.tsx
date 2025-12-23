@@ -1,3 +1,4 @@
+import { generateFakeSentence } from "@/lib/chat-api";
 import MessageBox from "../message-box";
 
 export default function Home({
@@ -5,10 +6,11 @@ export default function Home({
 }: {
   onChat: (message: string) => void;
 }) {
+  const fakeQuestion = generateFakeSentence(true)
   return (
     <div className="h-full w-full p-2 flex items-center justify-center flex-col gap-8 -my-8">
       <h2 className="text-3xl tracking-wide font-light">
-        Meow meow purr meow lick?
+        {fakeQuestion + "?"}
       </h2>
       <div className="w-1/2">
         <MessageBox

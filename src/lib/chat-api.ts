@@ -1,12 +1,12 @@
 import { dict, emojiDict } from "./dict";
-import type { ChatMessage } from "./types";
+import type { CatImageResp, ChatMessage, Token } from "./types";
 
-function generateFakeSentence(partial: boolean = false) {
+export function generateFakeSentence(partial: boolean = false) {
   let sentence = "";
   let words = 0;
 
   while (!(Math.random() < 0.8 && words > 2)) {
-    const wordIndex = Math.floor(Math.random() * (dict.length));
+    const wordIndex = Math.floor(Math.random() * dict.length);
     let word = dict[wordIndex];
     if (words == 0) {
       console.log(wordIndex);
@@ -32,15 +32,15 @@ function generateFakeSentence(partial: boolean = false) {
     //italicize the entire sentence
     sentence = "_" + sentence + "_";
   }
-  const caseRandomNumber = Math.random();
-  if (caseRandomNumber < 0.6) {
-    if (!partial) {
+  if (!partial) {
+    const caseRandomNumber = Math.random();
+    if (caseRandomNumber < 0.6) {
       sentence += ". ";
+    } else if (caseRandomNumber < 0.8) {
+      sentence += "! ";
+    } else {
+      sentence += "? ";
     }
-  } else if (caseRandomNumber < 0.8) {
-    sentence += "! ";
-  } else {
-    sentence += "? ";
   }
   console.log(sentence);
   return sentence;
@@ -49,11 +49,28 @@ export async function fakeTypeMessages(
   initMessages: ChatMessage[],
   setMessages: (messages: ChatMessage[]) => void,
   setLoading: (newState: boolean) => void,
+  token: Token,
 ) {
   console.log("starting");
   setLoading(true);
   let messages = initMessages;
   console.log(messages);
+
+  function onCancel() {
+    if (messages[messages.length - 1].actor === "user") return;
+    messages = messages.map((message, i) => {
+      if (i === messages.length - 1) {
+        return {
+          ...message,
+          complete: true,
+        };
+      } else {
+        return message;
+      }
+    });
+    setMessages(messages);
+  }
+
   // first, generate a random structure
   const maxElements = Math.floor(Math.random() * 50) + 1;
   const structure = [];
@@ -70,7 +87,7 @@ export async function fakeTypeMessages(
       const emojiRandomChance = Math.random();
       if (emojiRandomChance < 0.7) {
         sentence =
-          emojiDict[Math.floor(Math.random() * (emojiDict.length))] +
+          emojiDict[Math.floor(Math.random() * emojiDict.length)] +
           " " +
           sentence;
       }
@@ -89,8 +106,9 @@ export async function fakeTypeMessages(
       const emojiRandomChance = Math.random();
       if (emojiRandomChance < 0.7) {
         sentence =
-          emojiDict[Math.floor(Math.random() * (emojiDict.length))] +
-          " " + sentence;
+          emojiDict[Math.floor(Math.random() * emojiDict.length)] +
+          " " +
+          sentence;
       }
       structure.push("\n## " + sentence + "\n");
     }
@@ -104,10 +122,18 @@ export async function fakeTypeMessages(
   await new Promise((resolve) =>
     setTimeout(resolve, Math.floor(Math.random() * 5000) + 500),
   );
+  if (token.isCancelled) {
+    onCancel();
+    return;
+  }
   setLoading(false);
   messages = [...messages, { actor: "ai", message: "", complete: false }];
   setMessages(messages);
   for (let i = 0; i < markdown.length; i += Math.floor(Math.random() * 4) + 1) {
+    if (token.isCancelled) {
+      onCancel();
+      return;
+    }
     const partialMessage = markdown.substring(0, i);
     messages = messages.map((message, i) => {
       if (i === messages.length - 1) {
@@ -137,5 +163,85 @@ export async function fakeTypeMessages(
       return message;
     }
   });
+  setMessages(messages);
+}
+export async function fakeGenerateImage(
+  setImageUrl: (url: string) => void,
+  setGenerating: (newState: boolean) => void,
+  initMessages: ChatMessage[],
+  setMessages: (messages: ChatMessage[]) => void,
+  setLoading: (newState: boolean) => void,
+  token: Token,
+) {
+  let messages = initMessages;
+
+  function onCancel() {
+    if (messages[messages.length - 1].actor === "user") return;
+    messages = messages.map((message, i) => {
+      if (i === messages.length - 1) {
+        return {
+          ...message,
+          complete: true,
+        };
+      } else {
+        return message;
+      }
+    });
+    setMessages(messages);
+  }
+
+  const fakeSentence = generateFakeSentence();
+  setLoading(true);
+  const randomCat: CatImageResp = (
+    await fetch("https://cataas.com/cat?json=true")
+  ).json;
+
+  await new Promise((resolve) =>
+    setTimeout(resolve, Math.floor(Math.random() * 2000) + 500),
+  );
+  setLoading(false);
+  setGenerating(true);
+  await new Promise((resolve) =>
+    setTimeout(resolve, Math.floor(Math.random() * 10000) + 3000),
+  );
+  setGenerating(false);
+  messages = [...messages, { actor: "ai", message: "", complete: false }];
+  setMessages(messages);
+  const markdown = fakeSentence;
+  for (let i = 0; i < markdown.length; i += Math.floor(Math.random() * 4) + 1) {
+    if (token.isCancelled) {
+      onCancel();
+      return;
+    }
+    const partialMessage = markdown.substring(0, i);
+    messages = messages.map((message, i) => {
+      if (i === messages.length - 1) {
+        return {
+          ...message,
+          message: partialMessage,
+        };
+      } else {
+        return message;
+      }
+    });
+    setMessages(messages);
+    console.log(partialMessage);
+    console.log(messages);
+    await new Promise((resolve) =>
+      setTimeout(resolve, Math.floor(Math.random() * 50) + 10),
+    );
+  }
+  messages = messages.map((message, i) => {
+    if (i === messages.length - 1) {
+      return {
+        ...message,
+        message: markdown,
+        complete: true,
+      };
+    } else {
+      return message;
+    }
+  });
+  setImageUrl(randomCat.url);
   setMessages(messages);
 }

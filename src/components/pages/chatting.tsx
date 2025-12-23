@@ -8,19 +8,23 @@ export default function Chatting({
   messages,
   loading,
   onSend,
+  onStop,
+  onRegenerate,
 }: {
   messages: ChatMessage[];
   loading: boolean;
   onSend: (message: string) => void;
+  onStop: () => void;
+  onRegenerate: () => void;
 }) {
   const chatDiv = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-      if (!chatDiv.current) return;
-      chatDiv.current.scrollTo({
-        top: chatDiv.current.scrollHeight,
-        behavior: "smooth", // remove for instant jump
-      });
+    if (!chatDiv.current) return;
+    chatDiv.current.scrollTo({
+      top: chatDiv.current.scrollHeight,
+      behavior: "smooth", // remove for instant jump
+    });
   }, [messages, loading]);
   return (
     <div className="flex flex-col min-h-screen pt-11 -mt-3">
@@ -39,16 +43,25 @@ export default function Chatting({
                 <ChatResponse
                   markdown={message.message}
                   complete={message.complete}
+                  onRegenerate={onRegenerate}
                 />
               ),
             )}
-            {loading && <div className="shrink-0"><Spinner /></div>}
+            {loading && (
+              <div className="shrink-0">
+                <Spinner />
+              </div>
+            )}
           </div>
         </div>
       </div>
       <div className="w-full pb-6 flex flex-col items-center text-center">
         <div className="w-3/5 flex flex-col gap-2">
-          <MessageBox onSend={onSend} />
+          <MessageBox
+            onSend={onSend}
+            canStop={!messages[messages.length - 1].complete}
+            onStop={onStop}
+          />
           <p className="text-muted-foreground text-xs">
             CatGPT is not AI and will make mistakes. Don't bother checking
             important info

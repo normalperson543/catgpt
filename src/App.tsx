@@ -10,17 +10,44 @@ import {
   DropdownMenuTrigger,
 } from "./components/ui/dropdown-menu";
 import { Button } from "./components/ui/button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Home from "./components/pages/home";
-import type { ChatMessage } from "./lib/types";
+import type { ChatMessage, Token } from "./lib/types";
 import Chatting from "./components/pages/chatting";
-import { fakeTypeMessages } from "./lib/chat-api";
+import { fakeGenerateImage, fakeTypeMessages } from "./lib/chat-api";
 
+function createCancelToken() {
+  let cancelled = false;
+  return {
+    cancel() { cancelled = true },
+    get isCancelled() { return cancelled }
+  }; // generated with AI
+}
 function App() {
   const [chatting, setChatting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
+  const token = useRef<Token>(null)
 
+  function handleChat(message: string) {
+    const newMessages: ChatMessage[] = [
+      ...messages,
+      {
+        actor: "user",
+        message: message,
+        complete: true
+      },
+    ]
+    setMessages(newMessages);
+    token.current = createCancelToken()
+    const generationRandomChance = Math.random()
+    if (generationRandomChance < 0.95) {
+      fakeTypeMessages(newMessages, setMessages, setLoading, token.current);
+    } else {
+      // "generate" an image 5% of the time.
+      fakeGenerateImage()
+    }
+  }
   return (
     <SidebarProvider className="w-full h-full">
       <AppSidebar />
@@ -56,33 +83,22 @@ function App() {
             messages={messages}
             loading={loading}
             onSend={(message) => {
-              const newMessages: ChatMessage[] = [
-                ...messages,
-                {
-                  actor: "user",
-                  message: message,
-                  complete: true
-                },
-              ]
+              handleChat(message)
+            }}
+            onStop={() => token.current?.cancel()}
+            onRegenerate={() => {
+              console.log("b")
+              const newMessages: ChatMessage[] = messages.filter((m, i) => m.complete && i !== messages.length - 1)
               setMessages(newMessages);
-              fakeTypeMessages(newMessages, setMessages, setLoading);
+              token.current = createCancelToken()
+              fakeTypeMessages(newMessages, setMessages, setLoading, token.current);
             }}
           />
         ) : (
           <Home
             onChat={(message) => {
               setChatting(true)
-              const newMessages: ChatMessage[] = [
-                ...messages,
-                {
-                  actor: "user",
-                  message: message,
-                  complete: true
-                },
-              ]
-              console.log(newMessages)
-              setMessages(newMessages);
-              fakeTypeMessages(newMessages, setMessages, setLoading);
+              handleChat(message)
             }}
           />
         )}

@@ -91,7 +91,7 @@ export default function AppSidebar() {
                   <TooltipTrigger>
                     <SidebarToggle />
                   </TooltipTrigger>
-                  <TooltipContent>Open me sidebar meow</TooltipContent>
+                  <TooltipContent side="right">Open me sidebar meow</TooltipContent>
                 </Tooltip>
               ) : (
                 <HomeButton />
