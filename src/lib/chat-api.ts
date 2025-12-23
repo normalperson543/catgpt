@@ -6,7 +6,7 @@ function generateFakeSentence(partial: boolean = false) {
   let words = 0;
 
   while (!(Math.random() < 0.8 && words > 2)) {
-    const wordIndex = Math.floor(Math.random() * (dict.length - 1));
+    const wordIndex = Math.floor(Math.random() * (dict.length));
     let word = dict[wordIndex];
     if (words == 0) {
       console.log(wordIndex);
@@ -18,7 +18,7 @@ function generateFakeSentence(partial: boolean = false) {
       word = "**" + word + "**";
     }
     if (words === 0) {
-      sentence = word
+      sentence = word;
     } else {
       sentence += " " + word;
     }
@@ -53,15 +53,15 @@ export async function fakeTypeMessages(
   console.log("starting");
   setLoading(true);
   let messages = initMessages;
-  console.log(messages)
+  console.log(messages);
   // first, generate a random structure
   const maxElements = Math.floor(Math.random() * 50) + 1;
   const structure = [];
   for (let i = 0; i < maxElements; i++) {
     const randomElement = Math.random();
-    if (randomElement < 0.7) {
+    if (randomElement < 0.8) {
       structure.push(generateFakeSentence());
-    } else if (randomElement < 0.75) {
+    } else if (randomElement < 0.85) {
       if (structure[structure.length - 1] != "\n") {
         structure.push("\n");
       }
@@ -70,26 +70,27 @@ export async function fakeTypeMessages(
       const emojiRandomChance = Math.random();
       if (emojiRandomChance < 0.7) {
         sentence =
-          emojiDict[Math.floor(Math.random() * (emojiDict.length - 1))] +
+          emojiDict[Math.floor(Math.random() * (emojiDict.length))] +
+          " " +
           sentence;
       }
       structure.push("\n" + sentence + "\n");
     } else if (randomElement < 0.95) {
       // bullet point time
       const bullets = Math.floor(Math.random() * 6) + 2;
-      structure.push("\n")
+      structure.push("\n");
       for (let i = 0; i < bullets; i++) {
         structure.push("* " + generateFakeSentence(true) + "\n");
       }
-      structure.push("\n")
+      structure.push("\n");
     } else {
       // new heading
       let sentence = generateFakeSentence(true);
       const emojiRandomChance = Math.random();
       if (emojiRandomChance < 0.7) {
         sentence =
-          emojiDict[Math.floor(Math.random() * (emojiDict.length - 1))] +
-          sentence;
+          emojiDict[Math.floor(Math.random() * (emojiDict.length))] +
+          " " + sentence;
       }
       structure.push("\n## " + sentence + "\n");
     }
@@ -104,10 +105,10 @@ export async function fakeTypeMessages(
     setTimeout(resolve, Math.floor(Math.random() * 5000) + 500),
   );
   setLoading(false);
-  messages = [...messages, { actor: "ai", message: "", complete: false }]
+  messages = [...messages, { actor: "ai", message: "", complete: false }];
   setMessages(messages);
   for (let i = 0; i < markdown.length; i += Math.floor(Math.random() * 4) + 1) {
-    const partialMessage = markdown.substring(0, i)
+    const partialMessage = markdown.substring(0, i);
     messages = messages.map((message, i) => {
       if (i === messages.length - 1) {
         return {
@@ -119,7 +120,7 @@ export async function fakeTypeMessages(
       }
     });
     setMessages(messages);
-    console.log(partialMessage)
+    console.log(partialMessage);
     console.log(messages);
     await new Promise((resolve) =>
       setTimeout(resolve, Math.floor(Math.random() * 50) + 10),
@@ -130,7 +131,7 @@ export async function fakeTypeMessages(
       return {
         ...message,
         message: markdown,
-        complete: true
+        complete: true,
       };
     } else {
       return message;
