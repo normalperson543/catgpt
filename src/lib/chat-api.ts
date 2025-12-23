@@ -166,53 +166,36 @@ export async function fakeTypeMessages(
   setMessages(messages);
 }
 export async function fakeGenerateImage(
-  setImageUrl: (url: string) => void,
-  setGenerating: (newState: boolean) => void,
   initMessages: ChatMessage[],
   setMessages: (messages: ChatMessage[]) => void,
   setLoading: (newState: boolean) => void,
-  token: Token,
 ) {
   let messages = initMessages;
 
-  function onCancel() {
-    if (messages[messages.length - 1].actor === "user") return;
-    messages = messages.map((message, i) => {
-      if (i === messages.length - 1) {
-        return {
-          ...message,
-          complete: true,
-        };
-      } else {
-        return message;
-      }
-    });
-    setMessages(messages);
-  }
-
-  const fakeSentence = generateFakeSentence();
+  const fakeSentence = generateFakeSentence(true);
   setLoading(true);
-  const randomCat: CatImageResp = (
-    await fetch("https://cataas.com/cat?json=true")
-  ).json;
+  const catResp = await fetch("https://cataas.com/cat?json=true");
+  const randomCat: CatImageResp = await catResp.json();
 
   await new Promise((resolve) =>
     setTimeout(resolve, Math.floor(Math.random() * 2000) + 500),
   );
   setLoading(false);
-  setGenerating(true);
+  messages = [
+    ...messages,
+    {
+      actor: "ai",
+      message: "",
+      complete: false,
+      image: randomCat.url,
+    },
+  ];
+  setMessages(messages)
   await new Promise((resolve) =>
-    setTimeout(resolve, Math.floor(Math.random() * 10000) + 3000),
+    setTimeout(resolve, Math.floor(Math.random() * 3000) + 2000),
   );
-  setGenerating(false);
-  messages = [...messages, { actor: "ai", message: "", complete: false }];
-  setMessages(messages);
   const markdown = fakeSentence;
   for (let i = 0; i < markdown.length; i += Math.floor(Math.random() * 4) + 1) {
-    if (token.isCancelled) {
-      onCancel();
-      return;
-    }
     const partialMessage = markdown.substring(0, i);
     messages = messages.map((message, i) => {
       if (i === messages.length - 1) {
@@ -225,8 +208,6 @@ export async function fakeGenerateImage(
       }
     });
     setMessages(messages);
-    console.log(partialMessage);
-    console.log(messages);
     await new Promise((resolve) =>
       setTimeout(resolve, Math.floor(Math.random() * 50) + 10),
     );
@@ -236,12 +217,24 @@ export async function fakeGenerateImage(
       return {
         ...message,
         message: markdown,
+      };
+    } else {
+      return message;
+    }
+  });
+  setMessages(messages);
+  await new Promise((resolve) =>
+    setTimeout(resolve, Math.floor(Math.random() * 5000) + 2000),
+  );
+  messages = messages.map((message, i) => {
+    if (i === messages.length - 1) {
+      return {
+        ...message,
         complete: true,
       };
     } else {
       return message;
     }
   });
-  setImageUrl(randomCat.url);
   setMessages(messages);
 }

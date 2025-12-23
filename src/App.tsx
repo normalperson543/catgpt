@@ -41,11 +41,11 @@ function App() {
     setMessages(newMessages);
     token.current = createCancelToken()
     const generationRandomChance = Math.random()
-    if (generationRandomChance < 0.95) {
+    if (generationRandomChance < 0) {
       fakeTypeMessages(newMessages, setMessages, setLoading, token.current);
     } else {
       // "generate" an image 5% of the time.
-      fakeGenerateImage()
+      fakeGenerateImage(newMessages, setMessages, setLoading)
     }
   }
   return (

@@ -1,5 +1,6 @@
 import { generateFakeSentence } from "@/lib/chat-api";
 import MessageBox from "../message-box";
+import ShinyText from "../ShinyText";
 
 export default function Home({
   onChat,

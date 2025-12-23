@@ -16,14 +16,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import ShinyText from "./ShinyText";
 export default function ChatResponse({
   markdown,
   complete,
   onRegenerate,
+  image,
 }: {
   markdown: string;
   complete: boolean;
   onRegenerate: () => void;
+  image?: string;
 }) {
   const [copied, setCopied] = useState(false);
   const renderedMd = marked.parse(markdown, { breaks: true });
@@ -33,7 +36,7 @@ export default function ChatResponse({
     setCopied(false);
   }
   function readAloud() {
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       const msg = new SpeechSynthesisUtterance();
       msg.text = markdown;
       window.speechSynthesis.speak(msg);
@@ -41,11 +44,40 @@ export default function ChatResponse({
   }
   return (
     <div className="flex flex-col gap-2">
-      <div
-        dangerouslySetInnerHTML={{ __html: renderedMd }}
-        className="flex flex-col gap-3 leading-7"
-      ></div>
-      {complete && (
+      {!image && (
+        <div
+          dangerouslySetInnerHTML={{ __html: renderedMd }}
+          className="flex flex-col gap-3 leading-7"
+        ></div>
+      )}
+      {complete && image && (
+        <div>
+          <div className="flex flex-row gap-2">
+            <p>Image created</p>
+            <p>·</p>
+            <p className="text-muted-foreground">{markdown}</p>
+          </div>
+          <img src={image} width={480} height={480} className="rounded-lg" />
+        </div>
+      )}
+      {!complete && image && (
+        <div>
+          <div className="flex flex-row gap-2">
+            <ShinyText
+              text="Creating image"
+              disabled={false}
+              speed={1}
+            />
+            {markdown.length > 0 && (
+              <>
+                <p>·</p>
+                <p className="text-muted-foreground">{markdown}</p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+      {complete && !image && (
         <div className="flex flex-row gap-1">
           <Tooltip>
             <TooltipTrigger asChild>

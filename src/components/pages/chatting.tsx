@@ -3,6 +3,7 @@ import MessageBox from "../message-box";
 import Spinner from "../spinkit/spinner";
 import ChatResponse from "../chat-response";
 import { useEffect, useRef } from "react";
+import ShinyText from "@/components/ShinyText";
 
 export default function Chatting({
   messages,
@@ -13,6 +14,7 @@ export default function Chatting({
 }: {
   messages: ChatMessage[];
   loading: boolean;
+  generatingImage: boolean;
   onSend: (message: string) => void;
   onStop: () => void;
   onRegenerate: () => void;
@@ -23,7 +25,7 @@ export default function Chatting({
     if (!chatDiv.current) return;
     chatDiv.current.scrollTo({
       top: chatDiv.current.scrollHeight,
-      behavior: "smooth", // remove for instant jump
+      behavior: "smooth", // thanks AI didn't know this existed :p
     });
   }, [messages, loading]);
   return (
@@ -44,6 +46,7 @@ export default function Chatting({
                   markdown={message.message}
                   complete={message.complete}
                   onRegenerate={onRegenerate}
+                  image={message.image}
                 />
               ),
             )}
