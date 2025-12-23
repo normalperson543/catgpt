@@ -51,29 +51,28 @@ export default function ChatResponse({
         ></div>
       )}
       {complete && image && (
-        <div>
+        <div className="flex flex-col gap-3">
           <div className="flex flex-row gap-2">
             <p>Image created</p>
             <p>·</p>
             <p className="text-muted-foreground">{markdown}</p>
           </div>
-          <img src={image} width={480} height={480} className="rounded-lg" />
+          <img src={image} width={240} height={240} className="rounded-lg" />
         </div>
       )}
       {!complete && image && (
-        <div>
+        <div className="flex flex-col gap-3">
           <div className="flex flex-row gap-2">
-            <ShinyText
-              text="Creating image"
-              disabled={false}
-              speed={1}
-            />
+            <ShinyText text="Creating image" disabled={false} speed={1} />
             {markdown.length > 0 && (
               <>
                 <p>·</p>
                 <p className="text-muted-foreground">{markdown}</p>
               </>
             )}
+          </div>
+          <div className="w-60 h-60 rounded-lg" style={{backgroundImage: `url(${image})`}}> {/* https://stackoverflow.com/questions/20039765/how-to-apply-a-css-filter-to-a-background-image */}
+            <div className="relative w-full h-full backdrop-blur-xl block top-0 rounded-lg"></div>
           </div>
         </div>
       )}

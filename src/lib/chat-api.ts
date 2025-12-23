@@ -1,7 +1,10 @@
 import { dict, emojiDict } from "./dict";
 import type { CatImageResp, ChatMessage, Token } from "./types";
 
-export function generateFakeSentence(partial: boolean = false) {
+export function generateFakeSentence(
+  partial: boolean = false,
+  markdownAllowed: boolean = true,
+) {
   let sentence = "";
   let words = 0;
 
@@ -12,10 +15,12 @@ export function generateFakeSentence(partial: boolean = false) {
       console.log(wordIndex);
       word = word.substring(0, 1).toUpperCase() + word.substring(1); //makes it uppercase
     }
-    const formattingRandomNumber = Math.random();
-    if (formattingRandomNumber < 0.1) {
-      // bold
-      word = "**" + word + "**";
+    if (markdownAllowed) {
+      const formattingRandomNumber = Math.random();
+      if (formattingRandomNumber < 0.1) {
+        // bold
+        word = "**" + word + "**";
+      }
     }
     if (words === 0) {
       sentence = word;
@@ -24,13 +29,15 @@ export function generateFakeSentence(partial: boolean = false) {
     }
     words++;
   }
-  const formattingRandomNumber = Math.random();
-  if (formattingRandomNumber < 0.05) {
-    // bold the entire sentence!!
-    sentence = "**" + sentence + "**";
-  } else if (formattingRandomNumber < 0.1) {
-    //italicize the entire sentence
-    sentence = "_" + sentence + "_";
+  if (markdownAllowed) {
+    const formattingRandomNumber = Math.random();
+    if (formattingRandomNumber < 0.05) {
+      // bold the entire sentence!!
+      sentence = "**" + sentence + "**";
+    } else if (formattingRandomNumber < 0.1) {
+      //italicize the entire sentence
+      sentence = "_" + sentence + "_";
+    }
   }
   if (!partial) {
     const caseRandomNumber = Math.random();
@@ -172,7 +179,7 @@ export async function fakeGenerateImage(
 ) {
   let messages = initMessages;
 
-  const fakeSentence = generateFakeSentence(true);
+  const fakeSentence = generateFakeSentence(true, false);
   setLoading(true);
   const catResp = await fetch("https://cataas.com/cat?json=true");
   const randomCat: CatImageResp = await catResp.json();
@@ -190,7 +197,7 @@ export async function fakeGenerateImage(
       image: randomCat.url,
     },
   ];
-  setMessages(messages)
+  setMessages(messages);
   await new Promise((resolve) =>
     setTimeout(resolve, Math.floor(Math.random() * 3000) + 2000),
   );

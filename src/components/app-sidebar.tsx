@@ -28,14 +28,6 @@ import {
 import { Avatar, AvatarImage } from "./ui/avatar";
 import githubIcon from "@/assets/github.svg";
 
-const items = [
-  {
-    title: "New meow",
-    href: "#",
-    icon: SquarePenIcon,
-  },
-];
-
 function SidebarToggle() {
   const { toggleSidebar } = useSidebar();
 
@@ -56,20 +48,21 @@ function SidebarToggle() {
     </Button>
   );
 }
-function HomeButton() {
+function HomeButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       size="icon-sm"
       variant="ghost"
       onClick={(event) => {
         event.stopPropagation();
+        onClick();
       }}
     >
       <CatIcon width={36} height={36} />
     </Button>
   );
 }
-export default function AppSidebar() {
+export default function AppSidebar({ onHome }: { onHome: () => void }) {
   const { open, toggleSidebar } = useSidebar();
   const [hovering, setHovering] = useState(false);
   return (
@@ -91,13 +84,15 @@ export default function AppSidebar() {
                   <TooltipTrigger>
                     <SidebarToggle />
                   </TooltipTrigger>
-                  <TooltipContent side="right">Open me sidebar meow</TooltipContent>
+                  <TooltipContent side="right">
+                    Open me sidebar meow
+                  </TooltipContent>
                 </Tooltip>
               ) : (
-                <HomeButton />
+                <HomeButton onClick={onHome} />
               )
             ) : (
-              <HomeButton />
+              <HomeButton onClick={onHome} />
             )}
           </div>
           {open && <SidebarToggle />}
@@ -105,21 +100,20 @@ export default function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                asChild
-                onClick={(event) => {
-                  event.stopPropagation();
-                }}
-              >
-                <a href={item.href}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              onClick={(event) => {
+                event.stopPropagation();
+                onHome();
+              }}
+            >
+              <a href="#">
+                <SquarePenIcon />
+                <span>New meow</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
@@ -140,7 +134,10 @@ export default function AppSidebar() {
               <DropdownMenuContent>
                 <DropdownMenuGroup>
                   <DropdownMenuItem asChild>
-                    <a href="https://github.com/normalperson543/catgpt" target="_blank">
+                    <a
+                      href="https://github.com/normalperson543/catgpt"
+                      target="_blank"
+                    >
                       <img src={githubIcon} width={24} height={24} />
                       GitHub repository
                     </a>

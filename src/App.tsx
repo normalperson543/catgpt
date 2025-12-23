@@ -41,16 +41,21 @@ function App() {
     setMessages(newMessages);
     token.current = createCancelToken()
     const generationRandomChance = Math.random()
-    if (generationRandomChance < 0) {
+    if (generationRandomChance < 0.9) {
       fakeTypeMessages(newMessages, setMessages, setLoading, token.current);
     } else {
-      // "generate" an image 5% of the time.
+      // "generate" an image 10% of the time.
       fakeGenerateImage(newMessages, setMessages, setLoading)
     }
   }
   return (
     <SidebarProvider className="w-full h-full">
-      <AppSidebar />
+      <AppSidebar onHome={() => {
+        token.current?.cancel()
+        setMessages([]);
+        setChatting(false);
+        setLoading(false);
+      }} />
       <div className="h-full w-full p-3 flex flex-col">
         <div className="w-full flex flex-row gap-2 h-8 items-center fixed top-3 bg-background">
           <DropdownMenu>
