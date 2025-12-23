@@ -8,7 +8,7 @@ export function generateFakeSentence(
   let sentence = "";
   let words = 0;
 
-  while (!(Math.random() < 0.8 && words > 2)) {
+  while (!(Math.random() < 0.5 && words > 2)) {
     const wordIndex = Math.floor(Math.random() * dict.length);
     let word = dict[wordIndex];
     if (words == 0) {

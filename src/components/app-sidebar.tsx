@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/sidebar";
 import {
   CatIcon,
-  GithubIcon,
   PanelRightIcon,
   SquarePenIcon,
 } from "lucide-react";
@@ -138,7 +137,7 @@ export default function AppSidebar({ onHome }: { onHome: () => void }) {
                       href="https://github.com/normalperson543/catgpt"
                       target="_blank"
                     >
-                      <img src={githubIcon} width={24} height={24} />
+                      <img src={githubIcon} width={12} height={12} />
                       GitHub repository
                     </a>
                   </DropdownMenuItem>

@@ -3,7 +3,6 @@ import MessageBox from "../message-box";
 import Spinner from "../spinkit/spinner";
 import ChatResponse from "../chat-response";
 import { useEffect, useRef } from "react";
-import ShinyText from "@/components/ShinyText";
 
 export default function Chatting({
   messages,
@@ -14,8 +13,7 @@ export default function Chatting({
 }: {
   messages: ChatMessage[];
   loading: boolean;
-  generatingImage: boolean;
-  onSend: (message: string) => void;
+  onSend: (message: string, generateImage: boolean) => void;
   onStop: () => void;
   onRegenerate: () => void;
 }) {
@@ -62,7 +60,7 @@ export default function Chatting({
         <div className="w-3/5 flex flex-col gap-2">
           <MessageBox
             onSend={onSend}
-            canStop={!messages[messages.length - 1].complete}
+            canStop={!messages[messages.length - 1].complete && !messages[messages.length - 1].image}
             onStop={onStop}
           />
           <p className="text-muted-foreground text-xs">

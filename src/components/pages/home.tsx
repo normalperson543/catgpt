@@ -4,7 +4,7 @@ import MessageBox from "../message-box";
 export default function Home({
   onChat,
 }: {
-  onChat: (message: string) => void;
+  onChat: (message: string, generateImage: boolean) => void;
 }) {
   const fakeQuestion = generateFakeSentence(true, false)
   return (
@@ -14,8 +14,8 @@ export default function Home({
       </h2>
       <div className="w-1/2">
         <MessageBox
-          onSend={(message) => {
-            onChat(message);
+          onSend={(message, generateImage) => {
+            onChat(message, generateImage);
           }}
         />
       </div>

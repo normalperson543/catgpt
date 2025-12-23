@@ -19,43 +19,49 @@ import { fakeGenerateImage, fakeTypeMessages } from "./lib/chat-api";
 function createCancelToken() {
   let cancelled = false;
   return {
-    cancel() { cancelled = true },
-    get isCancelled() { return cancelled }
+    cancel() {
+      cancelled = true;
+    },
+    get isCancelled() {
+      return cancelled;
+    },
   }; // generated with AI
 }
 function App() {
   const [chatting, setChatting] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState(false);
-  const token = useRef<Token>(null)
+  const token = useRef<Token>(null);
 
-  function handleChat(message: string) {
+  function handleChat(message: string, generateImage: boolean) {
     const newMessages: ChatMessage[] = [
       ...messages,
       {
         actor: "user",
         message: message,
-        complete: true
+        complete: true,
       },
-    ]
+    ];
     setMessages(newMessages);
-    token.current = createCancelToken()
-    const generationRandomChance = Math.random()
-    if (generationRandomChance < 0.9) {
+    token.current = createCancelToken();
+    const generationRandomChance = Math.random();
+    if (generationRandomChance < 0.9 && !generateImage) {
       fakeTypeMessages(newMessages, setMessages, setLoading, token.current);
     } else {
       // "generate" an image 10% of the time.
-      fakeGenerateImage(newMessages, setMessages, setLoading)
+      fakeGenerateImage(newMessages, setMessages, setLoading);
     }
   }
   return (
     <SidebarProvider className="w-full h-full">
-      <AppSidebar onHome={() => {
-        token.current?.cancel()
-        setMessages([]);
-        setChatting(false);
-        setLoading(false);
-      }} />
+      <AppSidebar
+        onHome={() => {
+          token.current?.cancel();
+          setMessages([]);
+          setChatting(false);
+          setLoading(false);
+        }}
+      />
       <div className="h-full w-full p-3 flex flex-col">
         <div className="w-full flex flex-row gap-2 h-8 items-center fixed top-3 bg-background">
           <DropdownMenu>
@@ -87,23 +93,30 @@ function App() {
           <Chatting
             messages={messages}
             loading={loading}
-            onSend={(message) => {
-              handleChat(message)
+            onSend={(message, generateImage) => {
+              handleChat(message, generateImage);
             }}
             onStop={() => token.current?.cancel()}
             onRegenerate={() => {
-              console.log("b")
-              const newMessages: ChatMessage[] = messages.filter((m, i) => m.complete && i !== messages.length - 1)
+              console.log("b");
+              const newMessages: ChatMessage[] = messages.filter(
+                (m, i) => m.complete && i !== messages.length - 1,
+              );
               setMessages(newMessages);
-              token.current = createCancelToken()
-              fakeTypeMessages(newMessages, setMessages, setLoading, token.current);
+              token.current = createCancelToken();
+              fakeTypeMessages(
+                newMessages,
+                setMessages,
+                setLoading,
+                token.current,
+              );
             }}
           />
         ) : (
           <Home
-            onChat={(message) => {
-              setChatting(true)
-              handleChat(message)
+            onChat={(message, generateImage) => {
+              setChatting(true);
+              handleChat(message, generateImage);
             }}
           />
         )}
