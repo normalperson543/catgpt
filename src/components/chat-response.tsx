@@ -111,7 +111,7 @@ export default function ChatResponse({
             </TooltipContent>
           </Tooltip>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon-sm" variant="ghost">

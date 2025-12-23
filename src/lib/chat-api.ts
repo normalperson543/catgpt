@@ -12,7 +12,6 @@ export function generateFakeSentence(
     const wordIndex = Math.floor(Math.random() * dict.length);
     let word = dict[wordIndex];
     if (words == 0) {
-      console.log(wordIndex);
       word = word.substring(0, 1).toUpperCase() + word.substring(1); //makes it uppercase
     }
     if (markdownAllowed) {
@@ -49,7 +48,6 @@ export function generateFakeSentence(
       sentence += "? ";
     }
   }
-  console.log(sentence);
   return sentence;
 }
 export async function fakeTypeMessages(
@@ -58,10 +56,8 @@ export async function fakeTypeMessages(
   setLoading: (newState: boolean) => void,
   token: Token,
 ) {
-  console.log("starting");
   setLoading(true);
   let messages = initMessages;
-  console.log(messages);
 
   function onCancel() {
     if (messages[messages.length - 1].actor === "user") return;
@@ -121,11 +117,7 @@ export async function fakeTypeMessages(
     }
     console.log("b");
   }
-  console.log("structure");
-  console.log(structure);
   const markdown = structure.join("");
-  console.log("markdown");
-  console.log(markdown);
   await new Promise((resolve) =>
     setTimeout(resolve, Math.floor(Math.random() * 5000) + 500),
   );
@@ -153,8 +145,6 @@ export async function fakeTypeMessages(
       }
     });
     setMessages(messages);
-    console.log(partialMessage);
-    console.log(messages);
     await new Promise((resolve) =>
       setTimeout(resolve, Math.floor(Math.random() * 50) + 10),
     );

@@ -45,10 +45,10 @@ function App() {
     setMessages(newMessages);
     token.current = createCancelToken();
     const generationRandomChance = Math.random();
-    if (generationRandomChance < 0.9 && !generateImage) {
+    if (generationRandomChance < 0.8 && !generateImage) {
       fakeTypeMessages(newMessages, setMessages, setLoading, token.current);
     } else {
-      // "generate" an image 10% of the time.
+      // "generate" an image 20% of the time.
       fakeGenerateImage(newMessages, setMessages, setLoading);
     }
   }
@@ -98,7 +98,6 @@ function App() {
             }}
             onStop={() => token.current?.cancel()}
             onRegenerate={() => {
-              console.log("b");
               const newMessages: ChatMessage[] = messages.filter(
                 (m, i) => m.complete && i !== messages.length - 1,
               );

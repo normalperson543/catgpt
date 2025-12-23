@@ -1,4 +1,26 @@
 # CatGPT
-A fake ChatGPT-like app that instead gives randomly generated cat-like answers
+A fake AI app that instead gives randomly generated cat-like answers
 
 There is no LLM. What you are seeing is random words from a dictionary put together in random ways.
+
+It will pretend to:
+
+* Respond to your queries in cat speak (randomly generated)
+* Generate images for you (actually pulls from https://cataas.com/)
+
+## Developing
+Install deps:
+```
+pnpm i
+```
+Run development server:
+```
+pnpm dev
+```
+Open http://localhost:5173 to see the result.
+
+## Deploying
+Build:
+```
+pnpm build
+```
