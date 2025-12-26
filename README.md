@@ -9,6 +9,8 @@ It will pretend to:
 * Generate images for you (actually pulls from https://cataas.com/)
 
 ## Developing
+This project uses Plausible, if you want to add analytics, you can create a .env file and add a VITE_PLAUSIBLE_URL variable with the Plausible analytics URL.
+
 Install deps:
 ```
 pnpm i

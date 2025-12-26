@@ -15,6 +15,13 @@ import Home from "./components/pages/home";
 import type { ChatMessage, Token } from "./lib/types";
 import Chatting from "./components/pages/chatting";
 import { fakeGenerateImage, fakeTypeMessages } from "./lib/chat-api";
+import { init } from '@plausible-analytics/tracker'
+
+if (import.meta.env.VITE_PLAUSIBLE_URL) {
+  init({
+    domain: import.meta.env.VITE_PLAUSIBLE_URL
+  })
+}
 
 function createCancelToken() {
   let cancelled = false;
