@@ -17,12 +17,10 @@ import Chatting from "./components/pages/chatting";
 import { fakeGenerateImage, fakeTypeMessages } from "./lib/chat-api";
 import { init } from '@plausible-analytics/tracker'
 
-if (import.meta.env.VITE_PLAUSIBLE_URL) {
-  console.log(import.meta.env.VITE_PLAUSIBLE_URL)
+if (import.meta.env.VITE_PLAUSIBLE_URL && import.meta.env.VITE_SITE_URL) {
   init({
-    domain: import.meta.env.BASE_URL,
+    domain: import.meta.env.VITE_SITE_URL,
     endpoint: `https://${import.meta.env.VITE_PLAUSIBLE_URL}/api/event`,
-    captureOnLocalhost: true
   })
 }
 
